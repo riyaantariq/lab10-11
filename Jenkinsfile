@@ -2,11 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/riyaantariq/lab10-11'
-            }
-        }
+       stage('Checkout') {
+    steps {
+        git branch: 'main', url: 'https://github.com/riyaantariq/lab10-11'
+    }
         stage('Dependency Installation') {
             steps {
                 sh 'npm install' // Assuming npm is used for dependency installation
