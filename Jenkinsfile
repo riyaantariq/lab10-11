@@ -31,19 +31,12 @@ pipeline {
         stage('Run Docker Image') {
             steps {
                 script {
-                    docker.image("${IMAGE_NAME}:latest").run("-d -p 8080:80")
+                    bat 'docker run -d -p 3000:30 lab'
                 }
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS_ID) {
-                        docker.image("${IMAGE_NAME}:latest").push('latest')
-                    }
-                }
-            }
+       
         }
     }
 }
