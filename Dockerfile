@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose port 80 to the outside world
-EXPOSE 300
+EXPOSE 8080
 
 # Command to run the application when the container starts
 CMD ["npm", "start"]
