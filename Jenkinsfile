@@ -23,7 +23,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${IMAGE_NAME}:latest", "-f ${DOCKERFILE_PATH} .")
+                    bat 'docker build -t ${IMAGE_NAME} .'
                 }
             }
         }
