@@ -1,35 +1,46 @@
 pipeline {
     agent any
+    
+    environment {
+        DOCKER_CREDENTIALS_ID = '777e72f2-96a7-4ea6-8c10-32401a1b398d'
+        IMAGE_NAME = 'lab'
+        DOCKERFILE_PATH = './Dockerfile'
+    }
 
     stages {
-       stage('Checkout') {
-    steps {
-        git branch: 'main', url: 'https://github.com/riyaantariq/lab10-11'
-    }
-        stage('Dependency Installation') {
+        stage('Checkout') {
             steps {
-                sh 'npm install' // Assuming npm is used for dependency installation
+                git branch: 'main', url: 'https://github.com/riyaantariq/lab10-11'
             }
         }
+
+        stage('Dependency Installation') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build('lab:tag') // Replace 'your-image-name:tag' with your actual image name and tag
+                    docker.build("${IMAGE_NAME}:latest", "-f ${DOCKERFILE_PATH} .")
                 }
             }
         }
+
         stage('Run Docker Image') {
             steps {
                 script {
-                    docker.image('lab:tag').run('-d -p 8080:80') // Replace 'your-image-name:tag' with your actual image name and tag
+                    docker.image("${IMAGE_NAME}:latest").run("-d -p 8080:80")
                 }
             }
         }
+
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'credentials-id-for-docker-hub') {
-                        docker.image('lab:tag').push('latest') // Replace 'your-image-name:tag' with your actual image name and tag
+                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS_ID) {
+                        docker.image("${IMAGE_NAME}:latest").push('latest')
                     }
                 }
             }
